@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+    <properties/>
+    <struct>
+        <and abstract="true" mandatory="true" name="OnlineShop">
+            <feature mandatory="true" name="Catalog"/>
+            <or mandatory="true" name="Payment">
+                <feature name="BankAccount"/>
+                <feature name="ECoins"/>
+                <feature name="CreditCard"/>
+            </or>
+            <alt abstract="true" mandatory="true" name="Security">
+                <feature name="Low"/>
+                <feature name="High"/>
+            </alt>
+            <feature name="Search"/>
+        </and>
+    </struct>
+    <constraints>
+        <rule>
+            <imp>
+                <var>CreditCard</var>
+                <var>High</var>
+            </imp>
+        </rule>
+    </constraints>
+    <calculations Auto="true" Constraints="true" Features="true" Redundant="true" Tautology="true"/>
+    <comments/>
+    <featureOrder userDefined="false"/>
+</featureModel>

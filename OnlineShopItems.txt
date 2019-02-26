@@ -1,0 +1,6 @@
+Apple=0.30
+Banana=0.45
+Beach ball=4.70
+Socks=3.20
+Sandals=5.50
+Umbrella=5.00

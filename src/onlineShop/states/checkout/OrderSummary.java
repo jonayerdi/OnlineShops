@@ -17,10 +17,11 @@ public class OrderSummary implements Runnable {
 			int count = cart.getProductCount(product);
 			double price = catalog.getProductPrice(product);
 			double productTotal = price * count;
-			this.menu.addText(product + " (" + count + ")\t" + price + " €/unit\t" + productTotal + " € total");
+			this.menu.addText(product + " (" + count + ")\t" + String.format("%.2f", price) 
+				+ " €/unit\t" + String.format("%.2f", productTotal) + " € total");
 			total += productTotal;
 		}
-		this.menu.addText("TOTAL: " + total + " €");
+		this.menu.addText("TOTAL: " + String.format("%.2f", total) + " €");
 		this.menu.addText(Menu.ASTERISKS);
 		this.menu.addEntry(State.PaymentChoice, "PROCEED TO PAYMENT");
 		this.menu.addEntry(State.Start, "CANCEL ORDER");

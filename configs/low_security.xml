@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+    <feature automatic="selected" name="OnlineShop"/>
+    <feature automatic="selected" name="Catalog"/>
+    <feature automatic="selected" name="Payment"/>
+    <feature manual="selected" name="BankAccount"/>
+    <feature manual="selected" name="ECoins"/>
+    <feature automatic="unselected" name="CreditCard"/>
+    <feature automatic="selected" name="Security"/>
+    <feature manual="selected" name="Low"/>
+    <feature automatic="unselected" name="High"/>
+    <feature manual="selected" name="Search"/>
+</configuration>

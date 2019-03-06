@@ -8,7 +8,9 @@ import onlineShop.states.checkout.OrderSummary;
 import onlineShop.states.checkout.payment.PaymentChoice;
 import onlineShop.states.productSelection.CatalogView;
 import onlineShop.states.productSelection.ProductDetails;
+//#if Search
 import onlineShop.states.productSelection.ProductSearch;
+//#endif
 import util.Tuple;
 
 public class StateMachine implements Runnable {

@@ -3,6 +3,7 @@ package onlineShop.states;
 import input.InputReader;
 import onlineShop.data.Cart;
 import onlineShop.data.Catalog;
+import onlineShop.states.cartContent.CartContent;
 import onlineShop.states.productSelection.CatalogView;
 import onlineShop.states.productSelection.ProductDetails;
 import onlineShop.states.productSelection.ProductSearch;
@@ -14,8 +15,8 @@ public class StateMachine implements Runnable {
 	// Data
 	private Catalog catalog;
 	private Cart cart;
-	// State
-	private State state;
+	// State: Tuple containing selected state and selected product
+	private Tuple<State,String> state;
 	// Control
 	private Boolean running;
 	
@@ -23,65 +24,42 @@ public class StateMachine implements Runnable {
 		this.in = in;
 		this.catalog = catalog;
 		this.cart = cart;
-		this.state = State.Start;
+		this.state = new Tuple<State,String>(State.Start, null);
 		this.running = true;
-	}
-	
-	private State nextState(String selection) {
-		// Transitions
-		if(selection.equals("_start")) return State.Start;
-		if(selection.equals("_catalog")) return State.Catalog;
-		if(selection.equals("_product_details")) return State.ProductDetails;
-		// #if Search
-		if(selection.equals("_search")) return State.ProductSearch;
-		// #endif
-		if(selection.equals("_cart_content")) return State.CartContent;
-		if(selection.equals("_order_summary")) return State.OrderSummary;
-		if(selection.equals("_payment_choice")) return State.PaymentChoice;
-		// #if BankAccount
-		if(selection.equals("_bank_account")) return State.BankAccount;
-		// #endif
-		// #if ECoins
-		if(selection.equals("_ecoins")) return State.ECoins;
-		// #endif
-		// #if CreditCard
-		if(selection.equals("_credit_card")) return State.CreditCard;
-		// #endif
-		return State.Invalid;
 	}
 	
 	@Override
 	public void run()  {
 		try {
-			this.state = State.Start;
+			this.state = new Tuple<State,String>(State.Start, null);
 			this.running = true;
-			// Tuple containing selected state and selected product
-			Tuple<String,String> selection = new Tuple<String, String>("_start", null);
 			while(running) {
 				// States
-				switch(this.state) {
+				switch(this.state.a) {
 				case Start:
-					this.state = State.Catalog;
+					this.state.a = State.Catalog;
 					break;
 				case Catalog:
 					CatalogView catalogView = new CatalogView(this.in, this.catalog);
 					catalogView.run();
-					selection = catalogView.getSelection();
+					this.state = catalogView.getSelection();
 					break;
 				case ProductDetails:
-					ProductDetails productDetails = new ProductDetails(this.in, this.catalog, this.cart, selection.b);
+					ProductDetails productDetails = new ProductDetails(this.in, this.catalog, this.cart, this.state.b);
 					productDetails.run();
-					selection.a = productDetails.getSelection();
+					this.state.a = productDetails.getSelection();
 					break;
 				// #if Search
 				case ProductSearch:
 					ProductSearch productSearch = new ProductSearch(this.in, this.catalog);
 					productSearch.run();
-					selection = productSearch.getSelection();
+					this.state = productSearch.getSelection();
 					break;
 				// #endif
 				case CartContent:
-					
+					CartContent cartContent = new CartContent(this.in, this.cart);
+					cartContent.run();
+					this.state.a = cartContent.getSelection();
 					break;
 				case OrderSummary:
 					
@@ -104,13 +82,15 @@ public class StateMachine implements Runnable {
 					
 					break;
 				// #endif
+				case PaymentValidation:
+					
+					break;
 				default:
 					System.err.println("Invalid State in StateMachine");
-					this.state = State.Start;
+					this.state.a = State.Start;
 					break;
 				}
 				// Transitions
-				this.state = this.nextState(selection.a);
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();

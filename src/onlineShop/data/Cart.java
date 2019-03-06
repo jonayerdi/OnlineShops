@@ -2,6 +2,7 @@ package onlineShop.data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Cart {
 	private Map<String,Integer> products;
@@ -32,8 +33,12 @@ public class Cart {
 		return false;
 	}
 	
-	public Map<String,Integer> getItems() {
+	public Map<String,Integer> getProducts() {
 		return this.products;
+	}
+	
+	public Set<String> getProductNames() {
+		return this.products.keySet();
 	}
 	
 	public int getProductCount(String product) {

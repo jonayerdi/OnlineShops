@@ -7,28 +7,28 @@ import java.util.Map;
 
 import input.InputReader;
 
-public class Menu {
+public class Menu<T> {
 	public static final String ASTERISKS = "**************************************************";
 	
 	private InputReader in;
 	private String title;
 	private List<String> textLines;
-	private List<String> orderedKeys;
-	private Map<String,String> entries;
+	private List<T> orderedKeys;
+	private Map<T,String> entries;
 	
 	public Menu(InputReader in, String title) {
 		this.in = in;
 		this.title = title;
 		this.textLines = new ArrayList<String>();
-		this.orderedKeys = new ArrayList<String>();
-		this.entries = new HashMap<String, String>();
+		this.orderedKeys = new ArrayList<T>();
+		this.entries = new HashMap<T, String>();
 	}
 	
 	public void addText(String text) {
 		this.textLines.add(text);
 	}
 	
-	public void addEntry(String key, String value) throws Exception {
+	public void addEntry(T key, String value) throws Exception {
 		if(this.entries.containsKey(key)) {
 			throw new Exception("Duplicate menu entry");
 		}
@@ -37,9 +37,9 @@ public class Menu {
 		this.orderedKeys.add(key);
 	}
 	
-	public String show() {
+	public T show() {
 		String titleSidesAsterisks = repeat("*", (ASTERISKS.length() - this.title.length()) / 2);
-		String selectedKey = null;
+		T selectedKey = null;
 		int selectedChoice;
 		do {
 			System.out.println(ASTERISKS);

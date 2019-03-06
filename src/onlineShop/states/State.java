@@ -20,4 +20,5 @@ public enum State {
 	// #if CreditCard
 	CreditCard,
 	// #endif
+	PaymentValidation,
 }

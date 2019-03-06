@@ -7,6 +7,7 @@ import java.util.Set;
 import input.InputReader;
 import onlineShop.data.Catalog;
 import ui.Menu;
+import util.Tuple;
 
 public class ProductSearch implements Runnable {
 	private InputReader in;
@@ -21,8 +22,8 @@ public class ProductSearch implements Runnable {
 		this.menu = new Menu(in, " SEARCH PRODUCT ");
 		this.menu.addEntry("_search", "ENTER SEARCH TERM");
 		this.menu.addEntry("_catalog", "BACK TO CATALOG");
-		this.menu.addEntry("_cart", "YOUR CART");
-		this.menu.addEntry("_checkout", "CHECKOUT");
+		this.menu.addEntry("_cart_content", "YOUR CART");
+		this.menu.addEntry("_order_summary", "CHECKOUT");
 	}
 	
 	private Set<String> searchByProductName(String query) {
@@ -44,8 +45,8 @@ public class ProductSearch implements Runnable {
 			this.menu.addText(Menu.ASTERISKS);
 			resultsMenu.addEntry("_search", "ENTER SEARCH TERM");
 			resultsMenu.addEntry("_catalog", "BACK TO CATALOG");
-			resultsMenu.addEntry("_cart", "YOUR CART");
-			resultsMenu.addEntry("_checkout", "CHECKOUT");
+			resultsMenu.addEntry("_cart_content", "YOUR CART");
+			resultsMenu.addEntry("_order_summary", "CHECKOUT");
 		} catch(Exception e) { }
 		return resultsMenu;
 	}
@@ -61,7 +62,11 @@ public class ProductSearch implements Runnable {
 		}
 	}
 	
-	public String getSelection() {
-		return selection;
+	public Tuple<String,String> getSelection() {
+		if(this.selection.startsWith("_")) {
+			return new Tuple<String, String>(selection, null);
+		} else {
+			return new Tuple<String, String>("_product_details", selection);
+		}
 	}
 }

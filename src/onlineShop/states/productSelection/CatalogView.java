@@ -3,6 +3,7 @@ package onlineShop.states.productSelection;
 import input.InputReader;
 import onlineShop.data.Catalog;
 import ui.Menu;
+import util.Tuple;
 
 public class CatalogView implements Runnable {
 	private Menu menu;
@@ -18,8 +19,8 @@ public class CatalogView implements Runnable {
 		// #if Search
 		this.menu.addEntry("_search", "SEARCH PRODUCT");
 		// #endif
-		this.menu.addEntry("_cart", "YOUR CART");
-		this.menu.addEntry("_checkout", "CHECKOUT");
+		this.menu.addEntry("_cart_content", "YOUR CART");
+		this.menu.addEntry("_order_summary", "CHECKOUT");
 	}
 
 	@Override
@@ -27,7 +28,11 @@ public class CatalogView implements Runnable {
 		this.selection = this.menu.show();
 	}
 	
-	public String getSelection() {
-		return selection;
+	public Tuple<String,String> getSelection() {
+		if(this.selection.startsWith("_")) {
+			return new Tuple<String, String>(selection, null);
+		} else {
+			return new Tuple<String, String>("_product_details", selection);
+		}
 	}
 }

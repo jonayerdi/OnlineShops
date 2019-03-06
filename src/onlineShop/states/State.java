@@ -1,6 +1,7 @@
 package onlineShop.states;
 
 public enum State {
+	Invalid,
 	Start,
 	Catalog,
 	ProductDetails,

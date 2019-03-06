@@ -20,8 +20,8 @@ public class ProductDetails implements Runnable {
 		// #if Search
 		this.menu.addEntry("_search", "SEARCH PRODUCT");
 		// #endif
-		this.menu.addEntry("_cart", "YOUR CART");
-		this.menu.addEntry("_checkout", "CHECKOUT");
+		this.menu.addEntry("_cart_content", "YOUR CART");
+		this.menu.addEntry("_order_summary", "CHECKOUT");
 	}
 
 	@Override

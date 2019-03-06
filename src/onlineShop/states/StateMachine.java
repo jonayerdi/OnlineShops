@@ -1,6 +1,6 @@
 package onlineShop.states;
 
-import input.InputReader;
+import io.IO;
 import onlineShop.data.Cart;
 import onlineShop.data.Catalog;
 import onlineShop.states.cartContent.CartContent;
@@ -13,7 +13,7 @@ import util.Tuple;
 
 public class StateMachine implements Runnable {
 	// Input
-	private InputReader in;
+	private IO io;
 	// Data
 	private Catalog catalog;
 	private Cart cart;
@@ -22,8 +22,8 @@ public class StateMachine implements Runnable {
 	// Control
 	private Boolean running;
 	
-	public StateMachine(InputReader in, Catalog catalog, Cart cart) {
-		this.in = in;
+	public StateMachine(IO io, Catalog catalog, Cart cart) {
+		this.io = io;
 		this.catalog = catalog;
 		this.cart = cart;
 		this.state = new Tuple<State,String>(State.Start, null);
@@ -42,55 +42,55 @@ public class StateMachine implements Runnable {
 					this.state.a = State.Catalog;
 					break;
 				case Catalog:
-					CatalogView catalogView = new CatalogView(this.in, this.catalog);
+					CatalogView catalogView = new CatalogView(this.io, this.catalog);
 					catalogView.run();
 					this.state = catalogView.getSelection();
 					break;
 				case ProductDetails:
-					ProductDetails productDetails = new ProductDetails(this.in, this.catalog, this.cart, this.state.b);
+					ProductDetails productDetails = new ProductDetails(this.io, this.catalog, this.cart, this.state.b);
 					productDetails.run();
 					this.state.a = productDetails.getSelection();
 					break;
 				// #if Search
 				case ProductSearch:
-					ProductSearch productSearch = new ProductSearch(this.in, this.catalog);
+					ProductSearch productSearch = new ProductSearch(this.io, this.catalog);
 					productSearch.run();
 					this.state = productSearch.getSelection();
 					break;
 				// #endif
 				case CartContent:
-					CartContent cartContent = new CartContent(this.in, this.cart);
+					CartContent cartContent = new CartContent(this.io, this.cart);
 					cartContent.run();
 					this.state.a = cartContent.getSelection();
 					break;
 				case OrderSummary:
-					OrderSummary orderSummary = new OrderSummary(this.in, this.catalog, this.cart);
+					OrderSummary orderSummary = new OrderSummary(this.io, this.catalog, this.cart);
 					orderSummary.run();
 					this.state.a = orderSummary.getSelection();
 					break;
 				case PaymentChoice:
-					PaymentChoice paymentChoice = new PaymentChoice(this.in);
+					PaymentChoice paymentChoice = new PaymentChoice(this.io);
 					paymentChoice.run();
 					this.state.a = paymentChoice.getSelection();
 					break;
 				// #if BankAccount
 				case BankAccount:
 					System.out.println("Enter account number >> ");
-					this.in.nextLine();
+					this.io.readLine();
 					this.state.a = State.PaymentValidation;
 					break;
 				// #endif
 				// #if ECoins
 				case ECoins:
 					System.out.print("Enter E-coin whatever >> ");
-					this.in.nextLine();
+					this.io.readLine();
 					this.state.a = State.PaymentValidation;
 					break;
 				// #endif
 				// #if CreditCard
 				case CreditCard:
 					System.out.print("Enter credit card number >> ");
-					this.in.nextLine();
+					this.io.readLine();
 					this.state.a = State.PaymentValidation;
 					break;
 				// #endif

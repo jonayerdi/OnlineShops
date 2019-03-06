@@ -4,22 +4,22 @@ package onlineShop.states.productSelection;
 import java.util.HashSet;
 import java.util.Set;
 
-import input.InputReader;
+import io.IO;
 import onlineShop.data.Catalog;
 import onlineShop.states.State;
 import ui.Menu;
 import util.Tuple;
 
 public class ProductSearch implements Runnable {
-	private InputReader in;
+	private IO io;
 	private Catalog catalog;
 	private Menu<Tuple<State,String>> menu;
 	private Tuple<State,String> selection;
 	
-	public ProductSearch(InputReader in, Catalog catalog) throws Exception {
-		this.in = in;
+	public ProductSearch(IO io, Catalog catalog) throws Exception {
+		this.io = io;
 		this.catalog = catalog;
-		this.menu = new Menu<Tuple<State,String>>(in, " SEARCH PRODUCT ");
+		this.menu = new Menu<Tuple<State,String>>(io, " SEARCH PRODUCT ");
 		this.menu.addEntry(new Tuple<State,String>(State.ProductSearch, null), "ENTER SEARCH TERM");
 		this.menu.addEntry(new Tuple<State,String>(State.Catalog, null), "BACK TO CATALOG");
 		this.menu.addEntry(new Tuple<State,String>(State.CartContent, null), "YOUR CART");
@@ -36,7 +36,7 @@ public class ProductSearch implements Runnable {
 	}
 	
 	private Menu<Tuple<State,String>> createMenuFromSearchResults(Set<String> products) {
-		Menu<Tuple<State,String>> resultsMenu = new Menu<Tuple<State,String>>(this.in, " SEARCH RESULTS ");
+		Menu<Tuple<State,String>> resultsMenu = new Menu<Tuple<State,String>>(this.io, " SEARCH RESULTS ");
 		try {
 			for(String product : products) {
 				resultsMenu.addEntry(new Tuple<State,String>(State.ProductDetails, product), product);
@@ -54,7 +54,7 @@ public class ProductSearch implements Runnable {
 		this.selection = this.menu.show();
 		while(this.selection.a.equals(State.ProductSearch)) {
 			System.out.print("Enter search query >> ");
-			String query = this.in.nextLine();
+			String query = this.io.readLine();
 			Menu<Tuple<State,String>> resultsMenu = this.createMenuFromSearchResults(this.searchByProductName(query));
 			this.selection = resultsMenu.show();
 		}

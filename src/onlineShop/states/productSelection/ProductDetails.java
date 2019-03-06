@@ -1,21 +1,21 @@
 package onlineShop.states.productSelection;
 
-import input.InputReader;
+import io.IO;
 import onlineShop.data.Cart;
 import onlineShop.data.Catalog;
 import onlineShop.states.State;
 import ui.Menu;
 
 public class ProductDetails implements Runnable {
-	private InputReader in;
+	private IO io;
 	private Catalog catalog;
 	private Cart cart;
 	private String product;
 	private Menu<State> menu;
 	private State selection;
 	
-	public ProductDetails(InputReader in, Catalog catalog, Cart cart, String product) throws Exception {
-		this.in = in;
+	public ProductDetails(IO io, Catalog catalog, Cart cart, String product) throws Exception {
+		this.io = io;
 		this.catalog = catalog;
 		this.cart = cart;
 		this.product = product;
@@ -23,7 +23,7 @@ public class ProductDetails implements Runnable {
 	}
 	
 	public void makeMenu() throws Exception {
-		this.menu = new Menu<State>(this.in, " PRODUCT DETAILS  ");
+		this.menu = new Menu<State>(this.io, " PRODUCT DETAILS  ");
 		this.menu.addText("Name: " + this.product);
 		this.menu.addText("Price: " + catalog.getProductPrice(this.product));
 		this.menu.addText("In cart: " + cart.getProductCount(this.product));

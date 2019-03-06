@@ -1,6 +1,6 @@
 package onlineShop.states.checkout;
 
-import input.InputReader;
+import io.IO;
 import onlineShop.data.Cart;
 import onlineShop.data.Catalog;
 import onlineShop.states.State;
@@ -10,9 +10,9 @@ public class OrderSummary implements Runnable {
 	private Menu<State> menu;
 	private State selection;
 	
-	public OrderSummary(InputReader in, Catalog catalog, Cart cart) throws Exception {
+	public OrderSummary(IO io, Catalog catalog, Cart cart) throws Exception {
 		double total = 0.0;
-		this.menu = new Menu<State>(in, " ORDER SUMMARY ");
+		this.menu = new Menu<State>(io, " ORDER SUMMARY ");
 		for(String product : cart.getProductNames()) {
 			int count = cart.getProductCount(product);
 			double price = catalog.getProductPrice(product);

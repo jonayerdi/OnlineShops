@@ -1,6 +1,6 @@
 package onlineShop.states.productSelection;
 
-import input.InputReader;
+import io.IO;
 import onlineShop.data.Catalog;
 import onlineShop.states.State;
 import ui.Menu;
@@ -10,8 +10,8 @@ public class CatalogView implements Runnable {
 	private Menu<Tuple<State,String>> menu;
 	private Tuple<State,String> selection;
 	
-	public CatalogView(InputReader in, Catalog catalog) throws Exception {
-		this.menu = new Menu<Tuple<State,String>>(in, " CATALOG  ");
+	public CatalogView(IO io, Catalog catalog) throws Exception {
+		this.menu = new Menu<Tuple<State,String>>(io, " CATALOG  ");
 		for(String product : catalog.getProductNames()) {
 			this.menu.addEntry(new Tuple<State,String>(State.ProductDetails, product), product);
 		}

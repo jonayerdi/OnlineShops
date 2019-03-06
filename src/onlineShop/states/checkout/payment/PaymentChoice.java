@@ -1,6 +1,6 @@
 package onlineShop.states.checkout.payment;
 
-import input.InputReader;
+import io.IO;
 import onlineShop.states.State;
 import ui.Menu;
 
@@ -8,8 +8,8 @@ public class PaymentChoice implements Runnable {
 	private Menu<State> menu;
 	private State selection;
 	
-	public PaymentChoice(InputReader in) throws Exception {
-		this.menu = new Menu<State>(in, " PAYMENT CHOICE ");
+	public PaymentChoice(IO io) throws Exception {
+		this.menu = new Menu<State>(io, " PAYMENT CHOICE ");
 		// #if BankAccount
 		this.menu.addEntry(State.BankAccount, "BANK ACCOUNT");
 		// #endif

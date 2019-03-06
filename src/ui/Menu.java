@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import input.InputReader;
+import io.IO;
 
 public class Menu<T> {
 	public static final String ASTERISKS = "**************************************************";
 	
-	private InputReader in;
+	private IO io;
 	private String title;
 	private List<String> textLines;
 	private List<T> orderedKeys;
 	private Map<T,String> entries;
 	
-	public Menu(InputReader in, String title) {
-		this.in = in;
+	public Menu(IO io, String title) {
+		this.io = io;
 		this.title = title;
 		this.textLines = new ArrayList<String>();
 		this.orderedKeys = new ArrayList<T>();
@@ -42,21 +42,21 @@ public class Menu<T> {
 		T selectedKey = null;
 		int selectedChoice;
 		do {
-			System.out.println(ASTERISKS);
-			System.out.println(titleSidesAsterisks + this.title + titleSidesAsterisks);
-			System.out.println(ASTERISKS);
+			this.io.writeLine(ASTERISKS);
+			this.io.writeLine(titleSidesAsterisks + this.title + titleSidesAsterisks);
+			this.io.writeLine(ASTERISKS);
 			for(String line : this.textLines) {
-				System.out.println(line);
+				this.io.writeLine(line);
 			}
-			System.out.println(ASTERISKS);
-			System.out.print("Your choice >> ");
+			this.io.writeLine(ASTERISKS);
+			this.io.write("Your choice >> ");
 			try {
-				selectedChoice = Integer.parseInt(this.in.nextLine()) - 1;
+				selectedChoice = Integer.parseInt(this.io.readLine()) - 1;
 				selectedKey = this.orderedKeys.get(selectedChoice);
 			} catch(Exception e) {
 			} finally {
 				if(selectedKey == null) {
-					System.out.println("Please enter a valid choice");
+					this.io.writeLine("Please enter a valid choice");
 				}
 			}
 		} while(selectedKey == null);

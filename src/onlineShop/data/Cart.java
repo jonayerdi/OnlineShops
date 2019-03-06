@@ -11,6 +11,10 @@ public class Cart {
 		this.products = new HashMap<String,Integer>();
 	}
 	
+	public void clear() {
+		this.products.clear();
+	}
+	
 	public void addProductToCart(String product) {
 		Integer oldValue = this.products.get(product);
 		if(oldValue != null) {

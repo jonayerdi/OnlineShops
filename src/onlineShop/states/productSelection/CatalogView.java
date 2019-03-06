@@ -11,7 +11,7 @@ public class CatalogView implements Runnable {
 	private Tuple<State,String> selection;
 	
 	public CatalogView(InputReader in, Catalog catalog) throws Exception {
-		this.menu = new Menu<Tuple<State,String>>(in, " CATALOG ");
+		this.menu = new Menu<Tuple<State,String>>(in, " CATALOG  ");
 		for(String product : catalog.getProductNames()) {
 			this.menu.addEntry(new Tuple<State,String>(State.ProductDetails, product), product);
 		}

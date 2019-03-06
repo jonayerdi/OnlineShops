@@ -19,9 +19,8 @@ public class CartContent implements Runnable {
 	}
 	
 	public void makeMenu() throws Exception {
-		this.menu = new Menu<Tuple<State,String>>(this.in, " YOUR CART ");
-		this.menu.addText("Select product to remove");
-		this.menu.addText(Menu.ASTERISKS);
+		this.menu = new Menu<Tuple<State,String>>(this.in, " YOUR CART  ");
+		this.menu.addText("Select product to remove:");
 		for(String product : cart.getProductNames()) {
 			this.menu.addEntry(new Tuple<State,String>(State.ProductDetails, product), product + " (" + cart.getProductCount(product) + ")");
 		}

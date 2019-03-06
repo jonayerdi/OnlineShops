@@ -1,8 +1,8 @@
 // #condition Search
 package onlineShop.states.productSelection;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.IO;
 import onlineShop.data.Catalog;
@@ -25,8 +25,8 @@ public class ProductSearch implements Runnable {
 		this.menu.addEntry(new Tuple<State,String>(State.CartContent, null), "YOUR CART");
 	}
 	
-	private Set<String> searchByProductName(String query) {
-		Set<String> results = new HashSet<String>();
+	private List<String> searchByProductName(String query) {
+		List<String> results = new ArrayList<String>();
 		for(String item : this.catalog.getProductNames()) {
 			if(item.contains(query)) {
 				results.add(item);
@@ -35,7 +35,7 @@ public class ProductSearch implements Runnable {
 		return results;
 	}
 	
-	private Menu<Tuple<State,String>> createMenuFromSearchResults(Set<String> products) {
+	private Menu<Tuple<State,String>> createMenuFromSearchResults(List<String> products) {
 		Menu<Tuple<State,String>> resultsMenu = new Menu<Tuple<State,String>>(this.io, " SEARCH RESULTS ");
 		try {
 			for(String product : products) {

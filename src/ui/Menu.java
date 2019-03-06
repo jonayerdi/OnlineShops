@@ -32,7 +32,7 @@ public class Menu<T> {
 		if(this.entries.containsKey(key)) {
 			throw new Exception("Duplicate menu entry");
 		}
-		this.textLines.add(this.orderedKeys.size() + ". " + value);
+		this.textLines.add((this.orderedKeys.size()+1) + ". " + value);
 		this.entries.put(key, value);
 		this.orderedKeys.add(key);
 	}

@@ -27,7 +27,7 @@ public class PaymentChoice implements Runnable {
 		this.selection = this.menu.show();
 	}
 	
-	public State getSelection() {
-		return selection;
+	public State getNextState() {
+		return this.selection;
 	}
 }

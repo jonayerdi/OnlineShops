@@ -50,7 +50,7 @@ public class ProductDetails implements Runnable {
 		}
 	}
 	
-	public State getSelection() {
+	public State getNextState() {
 		return this.selection;
 	}
 }

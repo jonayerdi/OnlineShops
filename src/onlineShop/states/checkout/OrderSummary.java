@@ -32,7 +32,7 @@ public class OrderSummary implements Runnable {
 		this.selection = this.menu.show();
 	}
 	
-	public State getSelection() {
+	public State getNextState() {
 		return selection;
 	}
 }

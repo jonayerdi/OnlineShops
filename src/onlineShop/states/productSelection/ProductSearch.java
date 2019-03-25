@@ -60,7 +60,11 @@ public class ProductSearch implements Runnable {
 		}
 	}
 	
-	public Tuple<State,String> getSelection() {
-		return this.selection;
+	public State getNextState() {
+		return this.selection.a;
+	}
+	
+	public String getSelectedProduct() {
+		return this.selection.b;
 	}
 }

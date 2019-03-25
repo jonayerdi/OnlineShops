@@ -3,15 +3,19 @@ package onlineShop.states;
 import io.IO;
 import onlineShop.data.Cart;
 import onlineShop.data.Catalog;
+import onlineShop.data.PaymentData;
 import onlineShop.states.cartContent.CartContent;
 import onlineShop.states.checkout.OrderSummary;
+import onlineShop.states.checkout.payment.BankAccount;
+import onlineShop.states.checkout.payment.CreditCard;
+import onlineShop.states.checkout.payment.ECoins;
 import onlineShop.states.checkout.payment.PaymentChoice;
+import onlineShop.states.checkout.payment.PaymentValidation;
 import onlineShop.states.productSelection.CatalogView;
 import onlineShop.states.productSelection.ProductDetails;
 //#if Search
 import onlineShop.states.productSelection.ProductSearch;
 //#endif
-import util.Tuple;
 
 public class StateMachine implements Runnable {
 	// Input
@@ -19,8 +23,11 @@ public class StateMachine implements Runnable {
 	// Data
 	private Catalog catalog;
 	private Cart cart;
-	// State: Tuple containing selected state and selected product
-	private Tuple<State,String> state;
+	// Temporal data, only used to pass data from some states to others
+	private String selectedProduct;
+	private PaymentData paymentData;
+	// Current state
+	private State state;
 	// Control
 	private Boolean running;
 	
@@ -28,85 +35,90 @@ public class StateMachine implements Runnable {
 		this.io = io;
 		this.catalog = catalog;
 		this.cart = cart;
-		this.state = new Tuple<State,String>(State.Start, null);
+		this.state = State.Start;
 		this.running = true;
 	}
 	
 	@Override
 	public void run()  {
 		try {
-			this.state = new Tuple<State,String>(State.Start, null);
+			this.state = State.Start;
 			this.running = true;
 			while(running) {
 				// States
-				switch(this.state.a) {
+				switch(this.state) {
 				case Start:
-					this.state.a = State.Catalog;
+					this.state = State.Catalog;
 					break;
 				case Catalog:
 					CatalogView catalogView = new CatalogView(this.io, this.catalog);
 					catalogView.run();
-					this.state = catalogView.getSelection();
+					this.state = catalogView.getNextState();
+					this.selectedProduct = catalogView.getSelectedProduct();
 					break;
 				case ProductDetails:
-					ProductDetails productDetails = new ProductDetails(this.io, this.catalog, this.cart, this.state.b);
+					ProductDetails productDetails = new ProductDetails(this.io, this.catalog, this.cart, this.selectedProduct);
 					productDetails.run();
-					this.state.a = productDetails.getSelection();
+					this.state = productDetails.getNextState();
 					break;
 				// #if Search
 				case ProductSearch:
 					ProductSearch productSearch = new ProductSearch(this.io, this.catalog);
 					productSearch.run();
-					this.state = productSearch.getSelection();
+					this.state = productSearch.getNextState();
+					this.selectedProduct = productSearch.getSelectedProduct();
 					break;
 				// #endif
 				case CartContent:
 					CartContent cartContent = new CartContent(this.io, this.cart);
 					cartContent.run();
-					this.state.a = cartContent.getSelection();
+					this.state = cartContent.getNextState();
 					break;
 				case OrderSummary:
 					OrderSummary orderSummary = new OrderSummary(this.io, this.catalog, this.cart);
 					orderSummary.run();
-					this.state.a = orderSummary.getSelection();
+					this.state = orderSummary.getNextState();
 					break;
 				case PaymentChoice:
 					PaymentChoice paymentChoice = new PaymentChoice(this.io);
 					paymentChoice.run();
-					this.state.a = paymentChoice.getSelection();
+					this.state = paymentChoice.getNextState();
 					break;
 				// #if BankAccount
 				case BankAccount:
-					System.out.println("Enter account number >> ");
-					this.io.readLine();
-					this.state.a = State.PaymentValidation;
+					BankAccount bankAccount = new BankAccount(this.io);
+					bankAccount.run();
+					this.paymentData = bankAccount.getPaymentData();
+					this.state = State.PaymentValidation;
 					break;
 				// #endif
 				// #if ECoins
 				case ECoins:
-					System.out.print("Enter E-coin whatever >> ");
-					this.io.readLine();
-					this.state.a = State.PaymentValidation;
+					ECoins eCoins = new ECoins(this.io);
+					eCoins.run();
+					this.paymentData = eCoins.getPaymentData();
+					this.state = State.PaymentValidation;
 					break;
 				// #endif
 				// #if CreditCard
 				case CreditCard:
-					System.out.print("Enter credit card number >> ");
-					this.io.readLine();
-					this.state.a = State.PaymentValidation;
+					CreditCard creditCard = new CreditCard(this.io);
+					creditCard.run();
+					this.paymentData = creditCard.getPaymentData();
+					this.state = State.PaymentValidation;
 					break;
 				// #endif
 				case PaymentValidation:
-					System.out.println("Order processed :)");
-					this.cart.clear();
-					this.state.a = State.End;
+					PaymentValidation paymentValidation = new PaymentValidation(this.io, this.paymentData, this.cart);
+					paymentValidation.run();
+					this.state = paymentValidation.getNextState();
 					break;
 				case End:
 					this.running = false;
 					break;
 				default:
-					System.err.println("Invalid State in StateMachine");
-					this.state.a = State.Start;
+					this.io.writeLine("Invalid State in StateMachine");
+					this.state = State.Start;
 					break;
 				}
 			}

@@ -43,7 +43,7 @@ public class CartContent implements Runnable {
 		}
 	}
 	
-	public State getSelection() {
+	public State getNextState() {
 		return selection.a;
 	}
 }

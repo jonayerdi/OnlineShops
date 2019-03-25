@@ -6,15 +6,21 @@ import onlineShop.data.Catalog;
 import onlineShop.data.PaymentData;
 import onlineShop.states.cartContent.CartContent;
 import onlineShop.states.checkout.OrderSummary;
-import onlineShop.states.checkout.payment.BankAccount;
-import onlineShop.states.checkout.payment.CreditCard;
-import onlineShop.states.checkout.payment.ECoins;
 import onlineShop.states.checkout.payment.PaymentChoice;
 import onlineShop.states.checkout.payment.PaymentValidation;
 import onlineShop.states.productSelection.CatalogView;
 import onlineShop.states.productSelection.ProductDetails;
 //#if Search
 import onlineShop.states.productSelection.ProductSearch;
+//#endif
+//#if BankAccount
+import onlineShop.states.checkout.payment.BankAccount;
+//#endif
+//#if CreditCard
+import onlineShop.states.checkout.payment.CreditCard;
+//#endif
+//#if ECoins
+import onlineShop.states.checkout.payment.ECoins;
 //#endif
 
 public class StateMachine implements Runnable {

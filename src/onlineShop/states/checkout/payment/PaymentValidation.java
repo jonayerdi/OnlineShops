@@ -25,7 +25,7 @@ public class PaymentValidation implements Runnable {
 		} else {
 			this.io.writeLine("Order processed :)");
 			this.cart.clear();
-			this.nextState = State.Start;
+			this.nextState = State.End;
 		}
 	}
 	
